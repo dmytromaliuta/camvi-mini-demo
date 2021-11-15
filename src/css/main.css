@@ -1,0 +1,106 @@
+body {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'GothamMedium', sans-serif;
+    font-size: 15px;
+}
+ul, li {
+	display: block;
+	padding: 0px;
+	margin: 0px;
+}
+a {
+    text-decoration: none;
+    color: white;
+}
+.header {
+    background: #FAA634;
+}
+.image {
+    background: #426AB3;
+    width: 315px;
+}
+.image img{
+    width: 252px;
+    display: block;
+    padding: 21px 36px 13px 31px;
+}
+.menu {
+    background: #6C8CC7;
+    width: 315px;
+    height: 100vh;
+    font-size: 30px;
+    color: white;
+    padding-top: 47px;
+    padding-left: 65px;
+    box-sizing: border-box;
+}
+.menu div {
+    display: flex;
+}
+.arrow {
+    margin-left: 65px;
+    cursor: pointer;
+}
+.fa-chevron-up,
+.fa-chevron-down {
+    display: block;
+    margin-top: 7px;
+    font-size: 26px;
+}
+.menu nav ul{
+    font-size: 18px;
+    font-family: 'GothamBook', sans-serif;
+    height: 80px;
+    border-left: 1px solid #ffffff80;
+    margin-top: 13px;
+    margin-left: 25px;
+    padding: 2px 0;
+    box-sizing: border-box;
+}
+.menu nav {
+    height: 0px;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+}
+.menu nav.active {
+    height: 98px;
+}
+.menu nav ul li a{
+    width: 110px;
+    height: 30px;
+    margin-left: 11px;
+    box-sizing: border-box;
+    line-height: 30px;
+    margin-bottom: 16px;
+    text-align: left;
+    padding-left: 9px;
+    display: block;
+}
+.menu nav ul li a.active {
+    background: rgba(66,106,179,0.2);
+}
+.content {
+    display: grid;
+    grid-template-columns: 0fr 1fr
+}
+.verify {
+    height: 100vh;
+}
+.enroll {
+    background: green;
+    height: 100vh;
+}
+.form_div {
+    background: rgba(250, 166, 52, 1);
+    width: 800px;
+    height: 393px;
+    margin-top: 50px;
+    margin-left: 100px;
+    box-shadow: 0px 8px 30px #241c2920;
+    border-radius: 4px;
+}
+.form_div form label {
+    display: block;
+}

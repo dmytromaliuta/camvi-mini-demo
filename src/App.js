@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Header from './components/Header';
+import Menu from './components/Menu'
+import Verify from './components/Verify'
+import Enroll from './components/Enroll'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import './css/fonts.css';
+import './css/main.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div>
+        <Header />
+        <div className="content">
+          <Menu />
+          <div className="content-route-wrapper">
+            <Routes>
+              <Route path="/verify" element={<Verify />} />
+              <Route path="/enroll" element={<Enroll />} />
+            </Routes>
+          </div>
+        </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
