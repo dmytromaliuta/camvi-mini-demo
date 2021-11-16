@@ -7,7 +7,6 @@
     font-style: normal;
     font-weight: normal;
 }
-
 @font-face {
     font-family: "GothamLight";
     src: url("../fonts/Gotham/Gotham-Light.eot");
@@ -17,13 +16,30 @@
     font-style: normal;
     font-weight: normal;
 }
-
 @font-face {
     font-family: "GothamMedium";
     src: url("../fonts/Gotham/Gotham-Medium.eot");
     src: url("../fonts/Gotham/Gotham-Medium.eot")format("embedded-opentype"),
     url("../fonts/Gotham/Gotham-Medium.woff") format("woff"),
     url("../fonts/Gotham/Gotham-Medium.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+@font-face {
+    font-family: "GothamBold";
+    src: url("../fonts/Gotham/Gotham-Bold.eot");
+    src: url("../fonts/Gotham/Gotham-Bold.eot")format("embedded-opentype"),
+    url("../fonts/Gotham/Gotham-Bold.woff") format("woff"),
+    url("../fonts/Gotham/Gotham-Bold.ttf") format("truetype");
+    font-style: normal;
+    font-weight: normal;
+}
+@font-face {
+    font-family: "GothamBlack";
+    src: url("../fonts/Gotham/Gotham-Black.eot");
+    src: url("../fonts/Gotham/Gotham-Black.eot")format("embedded-opentype"),
+    url("../fonts/Gotham/Gotham-Black.woff") format("woff"),
+    url("../fonts/Gotham/Gotham-Black.ttf") format("truetype");
     font-style: normal;
     font-weight: normal;
 }

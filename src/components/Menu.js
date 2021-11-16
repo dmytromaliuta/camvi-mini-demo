@@ -8,8 +8,6 @@ import { NavLink } from 'react-router-dom';
 function Menu() {
 
     const [menu_btn, setActive] = useState(true);
-
-    console.log(menu_btn)
     
     return (
         <div className="menu">
