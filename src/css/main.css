@@ -29,7 +29,7 @@ a {
 .menu {
     background: #6C8CC7;
     width: 315px;
-    height: 100vh;
+    min-height: 100vh;
     font-size: 30px;
     color: white;
     padding-top: 47px;
@@ -105,6 +105,9 @@ a {
     margin-bottom: 40px;   
     align-items: center;
 }
+.verify {
+    margin-bottom: 167px;
+}
 .enroll .form_div form label span,
 .verify .form_div form label span {
     font-size: 24px;
@@ -172,6 +175,10 @@ a {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+.verify .btns .btn {
+    height: 70px;
+    font-size: 30px;
 }
 .verify .form_div {
     background: rgba(250, 166, 52, 1);
@@ -290,4 +297,132 @@ a {
 }
 .verify .btns {
     width: 800px;
+    margin-top: 19px;
+}
+.non-filled-input {
+    border: 1px solid red !important;
+}
+.enrollCamera {
+    width: 750px;
+    height: 646px;
+    background: #6C8CC7;
+    box-shadow: 0px 8px 30px rgba(36, 28, 41, 0.2);
+    border-radius: 4px;
+    margin-left: 100px;
+    margin-top: 50px;
+    margin-bottom: 228px;
+    position: relative;
+    padding-top: 52px;
+    box-sizing: border-box;
+}
+.enrollCamera .btn_close {
+    width: 31px;
+    height: 31px;
+    background: rgba(250, 166, 52, 1);
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    right: 24px;
+    top: 24px;
+    cursor: pointer;
+    border-radius: 1px;
+}
+.enrollCamera .btn_close img {
+    width: 76%;
+}
+.webcam {
+    width: 420px;
+    height: 420px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-size: 36px;
+    color: #6C6969;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.webcam video {
+    z-index: 5;
+}
+.webcam span {
+    position: absolute;
+    z-index: 1;
+}
+.capture_btn {
+    width: 360px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    background: #FAA634;
+    border-radius: 4px;
+    box-shadow: 0px 8px 30px rgba(36, 28, 41, 0.2);
+    font-size: 26px;
+    margin: 0 auto;
+    margin-top: 50px;
+    cursor: pointer;
+}
+.camera {
+    margin: 0 auto;
+    display: block;
+}
+.capture_photo_btn {
+    width: 300px;
+    height: 50px;
+    font-size: 28px;
+}
+.dropBlock section div{
+    width: 420px;
+    height: 420px;
+    cursor: pointer;
+    display: block;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    background-image: url("../img/bg-border.png");
+}
+.dropdawn-hint,
+.dropdawn-btn {
+    margin: 0;
+    padding: 0;
+    color: #6C6969;
+}
+.dropdawn-hint {
+    font-size: 24px;
+    width: 170px;
+    text-align: center;
+    margin:  0 auto;
+    padding-top: 166px;
+}
+.dropdawn-btn {
+    width: 135px;
+    height: 30px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 4px;
+    box-shadow: 0px 8px 30px rgba(36, 28, 41, 0.2);
+    border: 1px solid #FAA634;
+    margin: 0 auto;
+    margin-top: 23px;
+}
+.uploadedImageName {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 40px);
+    color: #6C6969;
+    font-size: 18px;
+    text-transform: uppercase;
+    text-align: center;
+}
+.enrollPhoto {
+    height: 600px;
+    box-sizing: border-box;
+    margin-bottom: 274px;
 }

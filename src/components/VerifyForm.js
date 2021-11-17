@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../css/main.css';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { my_api_key } from '../credentials'
 
 
 function VerifyForm() {
@@ -22,14 +23,29 @@ function VerifyForm() {
         { person_id: 'test13', person_label: 'Test 13' },
     ]
 
+    const [isCucKey, setCucKey] = useState(false);
+    const [isPersonalLabel, setPersonalLabel] = useState(false);
     const [isSelectActive, setSelect] = useState(false);
-
     const [data, setData] = useState({
-        apiKey: 'QyyHeiy190iQvmjEz8NwhBMhu3yVcwz2',
+        apiKey: my_api_key,
         cucKey: '',
         personalLabel: 'Choose person',
         liveness: false
     })
+
+    const handleEnroll = () => {
+        if(!data.cucKey.trim().length) {
+            setCucKey(true)
+        } else {
+            setCucKey(false)
+        }
+        if(data.personalLabel === 'Choose person') {
+            setPersonalLabel(true)
+        } else {
+            setPersonalLabel(false)
+        }
+        //console.log('click')
+    }
 
     return (
         <div className="form_content">
@@ -43,13 +59,13 @@ function VerifyForm() {
                     </label>
                     <label>
                         <span className="required">CUC Key</span>
-                        <input type="text" value={data.cucKey} onChange={(e) => {
+                        <input className={isCucKey ? 'non-filled-input' : ''} type="text" value={data.cucKey} onChange={(e) => {
                             setData({...data, cucKey: e.target.value})
                         }}/>
                     </label>
                     <label className="customSelectLabel">
                         <span className="required">Person Label</span>
-                        <div className="customSelect unselectable" style={{color: data.personalLabel !== 'Choose person' ? '#000': '#ccc'}} onClick={() => {
+                        <div className={isPersonalLabel ? 'customSelect unselectable non-filled-input' : 'customSelect unselectable'} style={{color: data.personalLabel !== 'Choose person' ? '#000': '#ccc'}} onClick={() => {
                             setSelect(!isSelectActive)
                         }}>{data.personalLabel}</div>
                         <ul className="selectItemList" style={{visibility: isSelectActive ? 'visible': 'hidden'}}>
@@ -83,7 +99,7 @@ function VerifyForm() {
                 </form>
             </div>
             <div className="btns">
-                <div className="btn verify_btn">
+                <div className="btn verify_btn" onClick={() => handleEnroll()}>
                     Next
                 </div>
             </div>

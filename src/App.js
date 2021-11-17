@@ -17,7 +17,7 @@ function App() {
           <div className="content-route-wrapper">
             <Routes>
               <Route path="/verify" element={<Verify />} />
-              <Route path="/enroll" element={<Enroll />} />
+              <Route path="/enroll/*" element={<Enroll />} />
             </Routes>
           </div>
         </div>
