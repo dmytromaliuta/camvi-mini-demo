@@ -1,26 +1,35 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useEffect } from 'react';
 import '../css/main.css';
 import Webcam from "react-webcam";
 import close from '../img/close.png'
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function EnrollViaCamera() {
+function EnrollViaCamera(props) {
+
+    const {enrollPerson} = props;
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if(props.enrollData === null) {
+            navigate('/enroll')
+        }
+    });
 
     const webcamRef = useRef(null);
-    const [imgSrc, setImgSrc] = React.useState(null);
     const capture = useCallback(
         () => {
             const imageSrc = webcamRef.current.getScreenshot();
-            setImgSrc(imageSrc);
+            enrollPerson(imageSrc, 'camera');
         },
-        [webcamRef]
+        [webcamRef, enrollPerson]
     );
 
     return (
         <div className="enrollCameraWrapper">
             <div className="enrollCamera">
                 <NavLink to="/enroll" className="btn_close">
-                    <img src={close} />
+                    <img src={close} alt="icon" />
                 </NavLink>
                 <div className="webcam">
                     <Webcam

@@ -1,35 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Dropzone from 'react-dropzone';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import '../css/main.css';
 import close from '../img/close.png';
 
-function EnrollViaPhoto() {
+function EnrollViaPhoto(props) {
+
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if(props.enrollData === null) {
+            navigate('/enroll')
+        }
+    });
 
     const [imgSrc, setImgSrc] = React.useState(null);
     const [imgName, setImgName] = React.useState(null);
 
-    const getBase64 = file => {
-        return new Promise(resolve => {
-            let baseURL = "";
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => {
-                baseURL = reader.result;
-                resolve(baseURL);
-            };
-        });
-    };
-
     const handleUpload = (file) => {
         setImgName('File name: ' + file[0].name)
-        getBase64(file[0])
-            .then(result => {
-                setImgSrc(result)
-            })
-            .catch(err => {
-                console.log('Error: ' + err);
-            });
+        setImgSrc(file[0])
     }
 
     return (
@@ -52,7 +42,7 @@ function EnrollViaPhoto() {
                         )}
                     </Dropzone>
                 </div>
-                <div className="capture_btn capture_photo_btn">
+                <div className="capture_btn capture_photo_btn" onClick={() => {props.enrollPerson(imgSrc, 'photo')}}>
                     Submit
                 </div>
             </div>

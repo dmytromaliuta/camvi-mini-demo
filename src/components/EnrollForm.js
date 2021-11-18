@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { my_api_key, gellery_label } from '../credentials';
+import { my_api_key } from '../credentials';
 import '../css/main.css';
 
 
@@ -13,8 +13,8 @@ function EnrollForm(props) {
     const [isPersonalLabel, setPersonalLabel] = useState(false);
     const[enrollData, setData] = useState({
         apiKey: my_api_key,
-        cucKey: '',
-        personalLabel: ''
+        cucKey: 'prodgc-uc',
+        personalLabel: 'prodgc-uc'
     })
 
     const handleEnroll = (type) => {
@@ -36,9 +36,11 @@ function EnrollForm(props) {
         }
         if(enrollData.apiKey !== '' && enrollData.cucKey !== '' && enrollData.personalLabel !== '') {
             if(type === 'camera') {
+                props.handleData(enrollData)
                 navigate('captureCamera')
             }
             if(type === 'photo') {
+                props.handleData(enrollData)
                 navigate('capturePhoto')
             }
         }
