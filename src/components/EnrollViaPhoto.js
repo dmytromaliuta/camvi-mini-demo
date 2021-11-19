@@ -23,7 +23,7 @@ function EnrollViaPhoto(props) {
     }
 
     return (
-        <div className="enrollPhotoWrapper">
+        <div className="enrollPhotoWrapper" style={props.loading ? {visibility: 'hidden'} : {visibility: 'visible'} }>
             <div className="enrollCamera enrollPhoto">
                 <NavLink to="/enroll" className="btn_close">
                     <img src={close} alt="icon" />

@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Routes } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import '../css/main.css';
 import EnrollForm from './EnrollForm'
 import EnrollViaCamera from './EnrollViaCamera'
 import EnrollViaPhoto from './EnrollViaPhoto'
+import Status from './Status'
 import { gallery_label } from '../credentials'
+import Loader from "react-loader-spinner";
 
 
-function Enroll() {
+function Enroll(props) {
+
+    useEffect(() => {
+        if(props === null) {
+            navigate('/enroll')
+        }
+    });
+
+    const navigate = useNavigate()
 
     const [enrollData, setData] = useState(null)
+    const [enrollStatus, setEnrollStatus] = useState({})
+    const [loading, setLoading] = useState(false)
 
     const handleData = (value) => {
         setData(value)
@@ -29,6 +42,7 @@ function Enroll() {
 
     const enrollPerson = (imageData, type) => {
         if(imageData === null) return 
+        setLoading(true)
         const URL = '/api/person/enroll?' + new URLSearchParams({
             cuc_key: enrollData.cucKey
         });
@@ -51,17 +65,38 @@ function Enroll() {
         })
             .then((response) => {
                 response.json()
-                    .then((data) => console.log(data))
-                    .catch((e) => console.log('ERROR'))
+                    .then((data) => {
+                        console.log(data)
+                        setLoading(false)
+                        setEnrollStatus(data)
+                        navigate('/enroll/status')
+
+                    })
+                    .catch(() => {
+                        setLoading(false)
+                        setEnrollStatus({
+                            status: 'fail',
+                            error: 'Enrolled failed'
+                        })
+                        navigate('/enroll/status')
+                    })
             })
-            .catch((e) => console.log('ERROR'));
     }
     return (
         <div className="enroll">
+            <Loader
+                visible={loading}
+                className="loader"
+                type="TailSpin"
+                color="#faa634"
+                height={50}
+                width={50}
+            />
             <Routes>
                 <Route path="/" element={<EnrollForm handleData={handleData} />} />
-                <Route path="/captureCamera" element={<EnrollViaCamera enrollPerson={enrollPerson} enrollData={enrollData} />} />
-                <Route path="/capturePhoto" element={<EnrollViaPhoto enrollPerson={enrollPerson} enrollData={enrollData} />} />
+                <Route path="/captureCamera" element={<EnrollViaCamera loading={loading} enrollPerson={enrollPerson} enrollData={enrollData} />} />
+                <Route path="/capturePhoto" element={<EnrollViaPhoto loading={loading} enrollPerson={enrollPerson} enrollData={enrollData} />} />
+                <Route path="/status" element={<Status status={enrollStatus} />} />
             </Routes>
         </div>
         

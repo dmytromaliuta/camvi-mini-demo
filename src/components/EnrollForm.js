@@ -13,8 +13,8 @@ function EnrollForm(props) {
     const [isPersonalLabel, setPersonalLabel] = useState(false);
     const[enrollData, setData] = useState({
         apiKey: my_api_key,
-        cucKey: 'prodgc-uc',
-        personalLabel: 'prodgc-uc'
+        cucKey: '',
+        personalLabel: ''
     })
 
     const handleEnroll = (type) => {

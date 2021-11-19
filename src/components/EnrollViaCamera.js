@@ -26,7 +26,7 @@ function EnrollViaCamera(props) {
     );
 
     return (
-        <div className="enrollCameraWrapper">
+        <div className="enrollCameraWrapper" style={props.loading ? {visibility: 'hidden'} : {visibility: 'visible'} }>
             <div className="enrollCamera">
                 <NavLink to="/enroll" className="btn_close">
                     <img src={close} alt="icon" />
