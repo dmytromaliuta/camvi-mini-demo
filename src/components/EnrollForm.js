@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { my_api_key } from '../credentials';
+import { my_api_key, cucKey } from '../credentials';
 import '../css/main.css';
 
 
@@ -13,7 +13,7 @@ function EnrollForm(props) {
     const [isPersonalLabel, setPersonalLabel] = useState(false);
     const[enrollData, setData] = useState({
         apiKey: my_api_key,
-        cucKey: '',
+        cucKey: cucKey,
         personalLabel: ''
     })
 

@@ -1,37 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/main.css';
 import { faChevronDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { my_api_key } from '../credentials'
+import { my_api_key, cucKey, gallery_label } from '../credentials'
 
 
-function VerifyForm() {
+function VerifyForm(props) {
 
-    const options = [
-        { person_id: 'test1', person_label: 'Test 1' },
-        { person_id: 'test2', person_label: 'Test 2' },
-        { person_id: 'test3', person_label: 'Test 3' },
-        { person_id: 'test4', person_label: 'Test 4' },
-        { person_id: 'test5', person_label: 'Test 5' },
-        { person_id: 'test6', person_label: 'Test 6' },
-        { person_id: 'test7', person_label: 'Test 7' },
-        { person_id: 'test8', person_label: 'Test 8' },
-        { person_id: 'test9', person_label: 'Test 9' },
-        { person_id: 'test10', person_label: 'Test 10' },
-        { person_id: 'test11', person_label: 'Test 11' },
-        { person_id: 'test12', person_label: 'Test 12' },
-        { person_id: 'test13', person_label: 'Test 13' },
-    ]
-
+    const [options, setOptions] = useState([])
     const [isCucKey, setCucKey] = useState(false);
     const [isPersonalLabel, setPersonalLabel] = useState(false);
     const [isSelectActive, setSelect] = useState(false);
     const [data, setData] = useState({
         apiKey: my_api_key,
-        cucKey: '',
+        cucKey: cucKey,
         personalLabel: 'Choose person',
+        personalID: '',
         liveness: false
     })
+
+    useEffect(() => {
+        const formData  = new FormData();
+        formData.append('gallery_label', gallery_label);
+        fetch(`/api/gallery/listPersons?cuc_key=${data.cucKey}`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'authorization': my_api_key
+            }
+        })
+            .then((response) => {
+                response.json()
+                    .then((data) => {
+                        setOptions(data.person_list)
+                    })
+                    .catch(() => {
+                        setOptions([])
+                    })
+            })
+    }, [data.cucKey]);
 
     const handleEnroll = () => {
         if(!data.cucKey.trim().length) {
@@ -44,7 +51,9 @@ function VerifyForm() {
         } else {
             setPersonalLabel(false)
         }
-        //console.log('click')
+        if(data.cucKey !== '' && data.personalLabel !== 'Choose person') {
+            props.handleVerifyData(data)
+        }
     }
 
     return (
@@ -75,10 +84,10 @@ function VerifyForm() {
                                         setSelect(!isSelectActive)
                                         setData({
                                             ...data,
-                                            personalLabel: item.target.innerText
+                                            personalID: options[index].person_id,
+                                            personalLabel: options[index].person_label
                                         })
-                                        console.log(item.target.innerText)
-                                    }} >{item.person_id}</li>
+                                    }} >{item.person_label}</li>
                                 })
                             }
                         </ul>

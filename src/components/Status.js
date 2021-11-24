@@ -9,22 +9,28 @@ function Status(props) {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(props.status.status === undefined) {
-            navigate('/enroll')
+        if(props.status.message === undefined) {
+            navigate(props.content)
         }
     });
 
     return (
         <div className="status">
             <div className="statusContent">
-                <NavLink to="/enroll" className="btn_close">
+                <NavLink to={props.content} className="btn_close">
                     <img src={close} alt="icon" />
                 </NavLink>
                 <p className="statusMessage">
                     {
-                        props.status.status === 'fail' ? props.status.error : 'Person enrolled successfully'
+                        props.status.message
                     }
                 </p>
+                {
+                    props.status.status === 0 && props.content === '/verify' &&
+                    <span className="hint">
+                        You may try again
+                    </span>
+                }
                 <NavLink to=".." className="submitBtn">
                     Ok
                 </NavLink>

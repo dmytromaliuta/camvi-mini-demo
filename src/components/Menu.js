@@ -20,10 +20,10 @@ function Menu() {
            <nav className={menu_btn ? 'active' : ''}>
                <ul>
                    <li>
-                       <NavLink to="/verify">Verify</NavLink>
+                       <NavLink to="/enroll">Enroll</NavLink>
                    </li>
                    <li>
-                       <NavLink to="/enroll">Enroll</NavLink>
+                       <NavLink to="/verify">Verify</NavLink>
                    </li>
                </ul>
            </nav>

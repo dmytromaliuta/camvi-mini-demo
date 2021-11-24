@@ -244,6 +244,7 @@ a {
     overflow-y: scroll;
     max-height: 430px;
     z-index: 5;
+    min-height: 50px;
 }
 .selectItemList li {
     padding: 8px 30px;
@@ -316,7 +317,8 @@ a {
     box-sizing: border-box;
 }
 .enrollCamera .btn_close,
-.statusContent .btn_close {
+.statusContent .btn_close,
+.stableVerifyContent .btn_close {
     width: 31px;
     height: 31px;
     background: rgba(250, 166, 52, 1);
@@ -330,7 +332,8 @@ a {
     border-radius: 1px;
 }
 .enrollCamera .btn_close img,
-.statusContent .btn_close img {
+.statusContent .btn_close img,
+.stableVerifyContent .btn_close img {
     width: 76%;
 }
 .webcam {
@@ -443,7 +446,7 @@ a {
     padding-top: 282px;
     text-align: center;
     color: white;
-    margin-bottom: 57px;
+    margin-bottom: 25px;
 }
 .statusContent .submitBtn {
     font-size: 28px;
@@ -458,6 +461,14 @@ a {
     justify-content: center;
     cursor: pointer;
     margin: 0 auto;
+    box-shadow: 0px 8px 30px rgb(36 28 41 / 20%);
+    margin-top: 34px;
+}
+.statusContent span.hint {
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    display: block;
 }
 .loader {
     left: 50%;
@@ -467,4 +478,54 @@ a {
 }
 .content-route-wrapper {
     position: relative;
+}
+.stableVerifyContent {
+    width: 1000px;
+    height: 700px;
+    background: #6C8CC7;
+    box-shadow: 0px 8px 30px rgba(36, 28, 41, 0.2);
+    border-radius: 4px;
+    margin-top: 50px;
+    margin-left: 50px;
+}
+.stableVerifyContent {
+    padding-top: 128px;
+    box-sizing: border-box;
+    position: relative;
+}
+.stableVerifyContent .webcam-wrapper {
+    width: 420px;
+    height: 420px;
+    margin: 0 auto;
+    background: url("/src/img/body.svg") no-repeat center center/75% #ECE8E8;
+}
+.stableVerifyContent .personName{
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 30px;
+}
+.livenessVerifyContent .hintIndex{
+    color: white;
+    font-size: 36px;
+    position: absolute;
+    letter-spacing: 7px;
+    left: 50px;
+    top: 30px;
+}
+.livenessVerifyContent .hint{
+    color: white;
+    font-size: 24px;
+    width: 450px;
+    height: 60px;
+    background: #F58232;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translate(-50%, 0px);
+    box-sizing: border-box;
 }

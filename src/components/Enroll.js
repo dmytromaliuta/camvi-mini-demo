@@ -66,17 +66,26 @@ function Enroll(props) {
             .then((response) => {
                 response.json()
                     .then((data) => {
-                        console.log(data)
                         setLoading(false)
-                        setEnrollStatus(data)
+                        if(data.status !== 'fail') {
+                            setEnrollStatus({
+                                message: 'Person enrolled successfully',
+                                status: 1
+                            })
+                        } else {
+                            setEnrollStatus({
+                                message: data.error,
+                                status: 1
+                            })
+                        }
                         navigate('/enroll/status')
 
                     })
                     .catch(() => {
                         setLoading(false)
                         setEnrollStatus({
-                            status: 'fail',
-                            error: 'Enrolled failed'
+                            message: 'Enrollment failed',
+                            status: 0
                         })
                         navigate('/enroll/status')
                     })
@@ -96,7 +105,7 @@ function Enroll(props) {
                 <Route path="/" element={<EnrollForm handleData={handleData} />} />
                 <Route path="/captureCamera" element={<EnrollViaCamera loading={loading} enrollPerson={enrollPerson} enrollData={enrollData} />} />
                 <Route path="/capturePhoto" element={<EnrollViaPhoto loading={loading} enrollPerson={enrollPerson} enrollData={enrollData} />} />
-                <Route path="/status" element={<Status status={enrollStatus} />} />
+                <Route path="/status" element={<Status status={enrollStatus} content="/enroll" />} />
             </Routes>
         </div>
         
