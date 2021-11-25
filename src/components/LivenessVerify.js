@@ -4,22 +4,42 @@ import Webcam from "react-webcam";
 import close from '../img/close.png'
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { leftMax, leftMin, rightMax, rightMin } from '../config.js'
+import { leftMax, leftMin, rightMax, rightMin, upMax, upMin, downMin, downMax } from '../config.js'
 
 function LivenessVerify(props) {
 
     const navigate = useNavigate()
     const webcamRef = useRef(null);
-    const [facePosition, setFacePosition] = useState({
-        hint: 'Turn face 45 degrees to the left',
-        hintIndex: 1
-    })
-    const [checkHint, setHintStatus] = useState(true)
-    useEffect(() => {
-        if (props.personalLabel === undefined) {
-            navigate('/verify')
+    const [hints] = useState([
+        {
+            hint: "Turn face 45 degrees to the left",
+            value: "fl"
+        },
+        {
+            hint: "Turn face 45 degrees to the right",
+            value: "fr"
+        },
+        {
+            hint: "Turn face 45 degrees up",
+            value: "fu"
+        },
+        {
+            hint: "Turn face 45 degrees down",
+            value: "fd"
+        },
+        {
+            hint: "Close left eye",
+            value: "el"
+        },
+        {
+            hint: "Close right eye",
+            value: "er"
         }
-    });
+    ].sort(() => Math.random() - 0.5).slice(0, 2))
+    const [attempt, setAttempt] = useState(1)
+    const [faceDetected, setFaceDetected] = useState(false)
+    const [checkHint, setHintStatus] = useState(true)
+    const [imageSrc, setImageSrc] = useState(null)
 
     const dataURLtoFile = (dataurl, filename) => {
         let arr = dataurl.split(','),
@@ -33,8 +53,9 @@ function LivenessVerify(props) {
         return new File([u8arr], filename, { type: mime });
     }
 
-    const capture = (direction, mainPhoto) => {
+    const capture = () => {
         const imageSrc = makeScreenshot();
+        setImageSrc(imageSrc)
         const formData = new FormData();
         formData.append('image', dataURLtoFile(imageSrc));
         fetch(`/api/face/detect?cuc_key=${props.cucKey}`, {
@@ -47,36 +68,82 @@ function LivenessVerify(props) {
             .then((response) => {
                 response.json()
                     .then((data) => {
-                        if (direction === 'l') {
-                            console.log(data.faces[0].yaw)
-                            console.log(data.face_count_input)
+                        if(data.error === 'No face detected') {
+                            setTimeout(() => {
+                                capture()
+                            }, 3000)
+                        }
+                        if(hints[attempt - 1].value === 'fl') {
                             if (data.face_count_input === 1 && data.faces[0].yaw < leftMax && data.faces[0].yaw > leftMin) {
                                 setHintStatus(true)
-                                setFacePosition({
-                                    hint: 'Turn face 45 degrees to the right',
-                                    hintIndex: 2
-                                })
-                                setTimeout(() => {
-                                    capture('r')
-                                }, 3000)
+                                setAttempt(2)
+                                if(attempt === 2) setFaceDetected(true)
                             } else {
                                 setHintStatus(false)
                                 setTimeout(() => {
-                                    capture('l')
+                                    capture()
                                 }, 3000)
                             }
                         }
-                        if (direction === 'r') {
-                            console.log(data.faces[0].yaw)
-                            console.log(data.face_count_input)
+                        if(hints[attempt - 1].value === 'fr') {
                             if (data.face_count_input === 1 && data.faces[0].yaw > rightMin && data.faces[0].yaw < rightMax) {
                                 setHintStatus(true)
-                                props.setLoading(true)
-                                props.handleVerifyImage(imageSrc)
+                                setAttempt(2)
+                                if(attempt === 2) setFaceDetected(true)
                             } else {
                                 setHintStatus(false)
                                 setTimeout(() => {
-                                    capture('r')
+                                    capture()
+                                }, 3000)
+                            }
+                        }
+                        if(hints[attempt - 1].value === 'fu') {
+                            if (data.face_count_input === 1 && data.faces[0].pitch < upMax && data.faces[0].pitch > upMin) {
+                                setHintStatus(true)
+                                setAttempt(2)
+                                if(attempt === 2) setFaceDetected(true)
+                            } else {
+                                setHintStatus(false)
+                                setTimeout(() => {
+                                    capture()
+                                }, 3000)
+                            }
+                        }
+                        if(hints[attempt - 1].value === 'fd') {
+                            if (data.face_count_input === 1 && data.faces[0].pitch > downMin && data.faces[0].pitch < downMax) {
+                                setHintStatus(true)
+                                setAttempt(2)
+                                if(attempt === 2) setFaceDetected(true)
+                            } else {
+                                setHintStatus(false)
+                                setTimeout(() => {
+                                    capture()
+                                }, 3000)
+                            }
+                        }
+                        if(hints[attempt - 1].value === 'el') {
+                            
+                            if (data.face_count_input === 1 && data.faces[0].eye1_open - data.faces[0].eye2_open  < -0.07) {
+                                setHintStatus(true)
+                                setAttempt(2)
+                                if(attempt === 2) setFaceDetected(true)
+                            } else {
+                                setHintStatus(false)
+                                setTimeout(() => {
+                                    capture()
+                                }, 3000)
+                            }
+                        }
+                        if(hints[attempt - 1].value === 'er') {
+                            
+                            if (data.face_count_input === 1 && data.faces[0].eye2_open - data.faces[0].eye1_open < -0.07) {
+                                setHintStatus(true)
+                                setAttempt(2)
+                                if(attempt === 2) setFaceDetected(true)
+                            } else {
+                                setHintStatus(false)
+                                setTimeout(() => {
+                                    capture()
                                 }, 3000)
                             }
                         }
@@ -91,17 +158,34 @@ function LivenessVerify(props) {
                     })
             })
     }
+
     const handleImage = () => {
         setTimeout(() => {
-            capture('l', makeScreenshot())
+            capture()
         }, 3000)
     }
+
     const makeScreenshot = useCallback(
         () => {
             return webcamRef.current.getScreenshot();
         },
         [webcamRef]
     );
+
+    useEffect(() => {
+        if (props.personalLabel === undefined) {
+            navigate('/verify')
+        }
+        if (attempt === 2 && !faceDetected) {
+            setTimeout(capture, 3000)
+        }
+        if (attempt === 2 && faceDetected) {
+            setHintStatus(true)
+            props.setLoading(true)
+            props.handleVerifyImage(imageSrc)
+        }
+    }, [attempt, faceDetected]);
+
     return (
         <div className="stableVerify livenessVerify" style={props.loading ? { visibility: 'hidden' } : { visibility: 'visible' }}>
             <div className="stableVerifyContent livenessVerifyContent">
@@ -109,10 +193,10 @@ function LivenessVerify(props) {
                     <img src={close} alt="icon" />
                 </NavLink>
                 <div className="hintIndex">
-                    <span style={checkHint ? { color: 'white' } : { color: '#FF0000' }}>{facePosition.hintIndex}</span>/2
+                    <span style={checkHint ? { color: 'white' } : { color: '#FF0000' }}>{attempt}</span>/2
                 </div>
                 <div className="hint" style={checkHint ? { border: 'none' } : { border: '5px solid #FF0000' }}>
-                    {facePosition.hint}
+                    {hints[attempt - 1].hint}
                 </div>
                 <div className="webcam-wrapper">
                     <Webcam
