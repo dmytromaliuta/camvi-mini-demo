@@ -17,6 +17,9 @@ function StableVerify(props) {
     const webcamRef = useRef(null);
     const capture = useCallback(
         () => {
+            if(webcamRef.current === null) {
+                return
+            }
             const imageSrc = webcamRef.current.getScreenshot();
             handleVerifyImage(imageSrc)
         },

@@ -38,8 +38,14 @@ function LivenessVerify(props) {
     ].sort(() => Math.random() - 0.5).slice(0, 2))
     const [attempt, setAttempt] = useState(1)
     const [faceDetected, setFaceDetected] = useState(false)
+    const [firstErrorDetected, setFirstErrorDetected] = useState(false)
+    const [secondErrorDetected, setSecondErrorDetected] = useState(false)
     const [checkHint, setHintStatus] = useState(true)
     const [imageSrc, setImageSrc] = useState(null)
+
+
+    const [errorMessage, setErrorMessage] = useState("Please, follow the prompts")
+
 
     const dataURLtoFile = (dataurl, filename) => {
         let arr = dataurl.split(','),
@@ -54,7 +60,11 @@ function LivenessVerify(props) {
     }
 
     const capture = () => {
-        const imageSrc = makeScreenshot();
+        let imageSrc = null
+        while(imageSrc === null) {
+            imageSrc = makeScreenshot();
+        }
+        if(!imageSrc) return
         setImageSrc(imageSrc)
         const formData = new FormData();
         formData.append('image', dataURLtoFile(imageSrc));
@@ -68,83 +78,87 @@ function LivenessVerify(props) {
             .then((response) => {
                 response.json()
                     .then((data) => {
+                        console.log(data)
                         if(data.error === 'No face detected') {
                             setTimeout(() => {
                                 capture()
-                            }, 3000)
+                            }, 100)
+                            setErrorMessage(data.error)
+                        } else {
+                            setErrorMessage('Please, follow the prompts')
                         }
                         if(hints[attempt - 1].value === 'fl') {
                             if (data.face_count_input === 1 && data.faces[0].yaw < leftMax && data.faces[0].yaw > leftMin) {
-                                setHintStatus(true)
+                                //setHintStatus(true)
                                 setAttempt(2)
                                 if(attempt === 2) setFaceDetected(true)
                             } else {
-                                setHintStatus(false)
+                                //setHintStatus(false)
                                 setTimeout(() => {
                                     capture()
-                                }, 3000)
+                                }, 100)
                             }
                         }
                         if(hints[attempt - 1].value === 'fr') {
                             if (data.face_count_input === 1 && data.faces[0].yaw > rightMin && data.faces[0].yaw < rightMax) {
-                                setHintStatus(true)
+                                //setHintStatus(true)
                                 setAttempt(2)
                                 if(attempt === 2) setFaceDetected(true)
                             } else {
-                                setHintStatus(false)
+                                //setHintStatus(false)
                                 setTimeout(() => {
                                     capture()
-                                }, 3000)
+                                }, 100)
                             }
                         }
                         if(hints[attempt - 1].value === 'fu') {
                             if (data.face_count_input === 1 && data.faces[0].pitch < upMax && data.faces[0].pitch > upMin) {
-                                setHintStatus(true)
+                                //setHintStatus(true)
                                 setAttempt(2)
                                 if(attempt === 2) setFaceDetected(true)
                             } else {
-                                setHintStatus(false)
+                                //setHintStatus(false)
                                 setTimeout(() => {
                                     capture()
-                                }, 3000)
+                                }, 100)
                             }
                         }
                         if(hints[attempt - 1].value === 'fd') {
                             if (data.face_count_input === 1 && data.faces[0].pitch > downMin && data.faces[0].pitch < downMax) {
-                                setHintStatus(true)
+                                //setHintStatus(true)
                                 setAttempt(2)
                                 if(attempt === 2) setFaceDetected(true)
                             } else {
-                                setHintStatus(false)
+                                //setHintStatus(false)
                                 setTimeout(() => {
                                     capture()
-                                }, 3000)
+                                }, 100)
                             }
                         }
                         if(hints[attempt - 1].value === 'el') {
                             
                             if (data.face_count_input === 1 && data.faces[0].eye1_open - data.faces[0].eye2_open  < -0.07) {
-                                setHintStatus(true)
+                                //setHintStatus(true)
                                 setAttempt(2)
                                 if(attempt === 2) setFaceDetected(true)
                             } else {
-                                setHintStatus(false)
+                                //setHintStatus(false)
                                 setTimeout(() => {
                                     capture()
-                                }, 3000)
+                                }, 100)
                             }
                         }
                         if(hints[attempt - 1].value === 'er') {
                             
                             if (data.face_count_input === 1 && data.faces[0].eye2_open - data.faces[0].eye1_open < -0.07) {
-                                setHintStatus(true)
+                                //setHintStatus(true)
                                 setAttempt(2)
                                 if(attempt === 2) setFaceDetected(true)
                             } else {
-                                setHintStatus(false)
+                                //setHintStatus(false)
                                 setTimeout(() => {
                                     capture()
-                                }, 3000)
+                                }, 100)
                             }
                         }
                     })
@@ -162,29 +176,55 @@ function LivenessVerify(props) {
     const handleImage = () => {
         setTimeout(() => {
             capture()
-        }, 3000)
+            setTimeout(() => {
+                setFirstErrorDetected(true)
+            }, 5000)
+        }, 100)
     }
 
     const makeScreenshot = useCallback(
         () => {
+            if(webcamRef.current === null) {
+                return false
+            }
             return webcamRef.current.getScreenshot();
         },
         [webcamRef]
     );
 
     useEffect(() => {
+        if(firstErrorDetected && attempt === 1) {
+            setFirstErrorDetected(false)
+            props.setVerifyStatus({
+                message: errorMessage,
+                status: 2
+            })
+            navigate('/verify/status')
+        }
+        if(secondErrorDetected && attempt === 2 && !faceDetected) {
+            setSecondErrorDetected(false)
+            props.setVerifyStatus({
+                message: errorMessage,
+                status: 2
+            })
+            navigate('/verify/status')
+        }
         if (props.personalLabel === undefined) {
             navigate('/verify')
         }
         if (attempt === 2 && !faceDetected) {
-            setTimeout(capture, 3000)
+            setTimeout(capture, 100)
+            setTimeout(() => {
+                setSecondErrorDetected(true)
+            }, 5000)
+            return
         }
-        if (attempt === 2 && faceDetected) {
-            setHintStatus(true)
+        if (attempt === 2 && faceDetected && firstErrorDetected && secondErrorDetected) {
+            //setHintStatus(true)
             props.setLoading(true)
             props.handleVerifyImage(imageSrc)
         }
-    }, [attempt, faceDetected]);
+    }, [attempt, faceDetected, firstErrorDetected, secondErrorDetected]);
 
     return (
         <div className="stableVerify livenessVerify" style={props.loading ? { visibility: 'hidden' } : { visibility: 'visible' }}>

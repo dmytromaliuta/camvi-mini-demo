@@ -31,7 +31,7 @@ function Status(props) {
                         You may try again
                     </span>
                 }
-                <NavLink to=".." className="submitBtn">
+                <NavLink to={props.status.status === 2 ? '/verify/liveness' : ".."} className="submitBtn">
                     Ok
                 </NavLink>
             </div>
