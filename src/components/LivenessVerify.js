@@ -37,6 +37,7 @@ function LivenessVerify(props) {
         }
     ].sort(() => Math.random() - 0.5).slice(0, 2))
     const [attempt, setAttempt] = useState(1)
+    const [sendStatus, setSendStatus] = useState(false)
     const [faceDetected, setFaceDetected] = useState(false)
     const [firstErrorDetected, setFirstErrorDetected] = useState(false)
     const [secondErrorDetected, setSecondErrorDetected] = useState(false)
@@ -219,10 +220,13 @@ function LivenessVerify(props) {
             }, 5000)
             return
         }
-        if (attempt === 2 && faceDetected && firstErrorDetected && secondErrorDetected) {
-            //setHintStatus(true)
-            props.setLoading(true)
-            props.handleVerifyImage(imageSrc)
+        if (attempt === 2 && faceDetected) {
+            setSendStatus(true)
+            if(!sendStatus) {
+                //setHintStatus(true)
+                props.setLoading(true)
+                props.handleVerifyImage(imageSrc)
+            }
         }
     }, [attempt, faceDetected, firstErrorDetected, secondErrorDetected]);
 
